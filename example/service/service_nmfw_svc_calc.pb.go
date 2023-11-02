@@ -340,6 +340,7 @@ func (c *CalcClient) Average(ctx context.Context, req AverageRequest) (*CalcResp
 
 	return &res, nil
 }
+
 func (c *CalcClient) Add(ctx context.Context, req AddRequest) (*CalcResponse, error) {
 	rb, err := proto.Marshal(&req)
 	if err != nil {
@@ -377,6 +378,7 @@ func (c *CalcClient) Add(ctx context.Context, req AddRequest) (*CalcResponse, er
 
 	return &res, nil
 }
+
 func (c *CalcClient) Expression(ctx context.Context, req ExpressionRequest) (*CalcResponse, error) {
 	rb, err := proto.Marshal(&req)
 	if err != nil {

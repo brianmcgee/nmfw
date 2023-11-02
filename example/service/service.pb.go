@@ -7,10 +7,11 @@
 package service
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -262,13 +263,15 @@ func file_service_proto_rawDescGZIP() []byte {
 	return file_service_proto_rawDescData
 }
 
-var file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_service_proto_goTypes = []interface{}{
-	(*AddRequest)(nil),        // 0: calc.AddRequest
-	(*AverageRequest)(nil),    // 1: calc.AverageRequest
-	(*ExpressionRequest)(nil), // 2: calc.ExpressionRequest
-	(*CalcResponse)(nil),      // 3: calc.CalcResponse
-}
+var (
+	file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+	file_service_proto_goTypes  = []interface{}{
+		(*AddRequest)(nil),        // 0: calc.AddRequest
+		(*AverageRequest)(nil),    // 1: calc.AverageRequest
+		(*ExpressionRequest)(nil), // 2: calc.ExpressionRequest
+		(*CalcResponse)(nil),      // 3: calc.CalcResponse
+	}
+)
 var file_service_proto_depIdxs = []int32{
 	1, // 0: calc.Calc.Average:input_type -> calc.AverageRequest
 	0, // 1: calc.Calc.Add:input_type -> calc.AddRequest

@@ -5,26 +5,26 @@ to go from `service.proto` to running a service in 5 minutes after supplying tra
 little or no NATS knowledge.
 
 Using NATS as a Microservice transport has significant advantages over HTTP but there has not really
-been a good effort made to leverage those features into a gRPC like framework. 
+been a good effort made to leverage those features into a gRPC like framework.
 
 This is a exploration of how such a framework might look, it would leverage NATS to:
 
- * Provide Load Balancing for horizontal and vertical scale out
- * Provides GSLB style failover and fallback cross region
- * Supports extending a centralized service to the edge using Leafnodes
- * Supports scaling individual functions within the service differently from others. You could run a movie encoder function on expensive GPU equipped machines while other supporting functions can run on smaller instances
- * No service discovery, registries etc needed as NATS handles that in real time
- * (Eventually) re-using handlers between real time RPC based use cases and Job Queue style use cases
+-   Provide Load Balancing for horizontal and vertical scale out
+-   Provides GSLB style failover and fallback cross region
+-   Supports extending a centralized service to the edge using Leafnodes
+-   Supports scaling individual functions within the service differently from others. You could run a movie encoder function on expensive GPU equipped machines while other supporting functions can run on smaller instances
+-   No service discovery, registries etc needed as NATS handles that in real time
+-   (Eventually) re-using handlers between real time RPC based use cases and Job Queue style use cases
 
 ## Features
 
- * Requires standard go types generated using `protoc-gen-go`
- * Creates a service type that hosts the microservice
- * Creates a CLI tool that runs the microservice
- * Microservice can optionally export Prometheus metrics
- * Creates a Client class that can interact with the service
- * Service handlers are pure business logic and transport agnostic
- * Timeouts are propagated from Client to Service
+-   Requires standard go types generated using `protoc-gen-go`
+-   Creates a service type that hosts the microservice
+-   Creates a CLI tool that runs the microservice
+-   Microservice can optionally export Prometheus metrics
+-   Creates a Client class that can interact with the service
+-   Service handlers are pure business logic and transport agnostic
+-   Timeouts are propagated from Client to Service
 
 ## Status
 
@@ -90,11 +90,11 @@ $ docker run --ti --rm -v `pwd`/go/src ripienaar/nmfw:latest
 # exit
 ```
 
- * Generates data types using standard `protoc-gen-go` plugin info `/go/src/service`
- * Generates a service called `CalcService` that binds to the Tech Preview [NATS Micro](https://github.com/nats-io/nats-architecture-and-design/blob/main/adr/ADR-32.md) system in `nats.go` into `/go/src/service`
- * Generates a command called `calc` that runs the service with version `0.0.2` in `/go/src/service/calc`
- * Generates a client called `CalcClient` that can interact with the service into `/go/src/service`
- * Requires the user to create implementation methods in `github.com/ripienaar/nmfw/example/impl`
+-   Generates data types using standard `protoc-gen-go` plugin info `/go/src/service`
+-   Generates a service called `CalcService` that binds to the Tech Preview [NATS Micro](https://github.com/nats-io/nats-architecture-and-design/blob/main/adr/ADR-32.md) system in `nats.go` into `/go/src/service`
+-   Generates a command called `calc` that runs the service with version `0.0.2` in `/go/src/service/calc`
+-   Generates a client called `CalcClient` that can interact with the service into `/go/src/service`
+-   Requires the user to create implementation methods in `github.com/ripienaar/nmfw/example/impl`
 
 **NOTE** This is how the `example` directory in this repository was created
 
@@ -122,10 +122,10 @@ func AddHandler(ctx context.Context, req service.AddRequest) (*service.CalcRespo
 
 The context will have a deadline set which is propagated from the timeout supplied by the client.
 
-The context has a helper value that provides access to prepared loggers, nats connection and theo original `micro` request. 
+The context has a helper value that provides access to prepared loggers, nats connection and theo original `micro` request.
 Use this to log to the service and access things like JetStream without requiring new connections per invocation.
 
-Here's a part of the implementation that defines the interface and then accesses it.  We have to define the interface here to 
+Here's a part of the implementation that defines the interface and then accesses it. We have to define the interface here to
 avoid cyclic imports. You can define just the helper method you actually need here.
 
 ```golang
@@ -139,14 +139,14 @@ type request interface {
 func ExpressionHandler(ctx context.Context, req service.ExpressionRequest) (*service.CalcResponse, error) {
     helper := ctx.Value("nmfw").(request)
     log := helper.Logger()
-	
+
     log.Infof("Calculating expression %s", req.Expression)
-    
+
     // ...
 }
 ```
 
-### Running 
+### Running
 
 The service host uses a NATS Context for connection properties, create it using `nats context` and then run the service after
 compiling it: in `service/calc`.
@@ -166,7 +166,7 @@ Global Flags:
   --help     Show context-sensitive help
   --version  Show application version.
   --debug    Log at debug level ($DEBUG)
-  
+
 $ ./calc run --help
 usage: calc run [<flags>]
 
@@ -179,7 +179,7 @@ Flags:
 ```
 
 The command takes some flags for connection properties and logging, future versions will include tools to help administrators
-discover and introspect running instances.  We start Prometheus metrics on port `8222`
+discover and introspect running instances. We start Prometheus metrics on port `8222`
 
 ```nohighlight
 $ ./calc run --context AUTH_CALLOUT --port 8222
@@ -214,21 +214,21 @@ fmt.Println(res.Result)
 
 There are some limitations at present given the young age of this project:
 
- * Services should be implemented in a single `*.proto` file, it may import other files
- * Some effort has been made to support multiple services in the single proto file but there are many edge cases
- * No streaming responses are supported yet
+-   Services should be implemented in a single `*.proto` file, it may import other files
+-   Some effort has been made to support multiple services in the single proto file but there are many edge cases
+-   No streaming responses are supported yet
 
 ## TODO
 
- * Support more `.proto` file behaviors
- * Support streaming responses
- * ~~Pass a context to the handlers that include logger and nats connection~~
- * More observability, possibly propagate tracing headers
- * Generate a Dockerfile to host the service
- * Generate `Makefile` or similar to rebuild the generated code and containers
- * ~~One `micro` per Service~~
- * ~~Think about timeout, some functions have different timeouts than others, how to handle?~~ Propagated using the `Nmfw-Deadline` header and passed to handlers as a `context.Context`.
- * Include the proto schema and expose over the `micro` schemas feature
+-   Support more `.proto` file behaviors
+-   Support streaming responses
+-   ~~Pass a context to the handlers that include logger and nats connection~~
+-   More observability, possibly propagate tracing headers
+-   Generate a Dockerfile to host the service
+-   Generate `Makefile` or similar to rebuild the generated code and containers
+-   ~~One `micro` per Service~~
+-   ~~Think about timeout, some functions have different timeouts than others, how to handle?~~ Propagated using the `Nmfw-Deadline` header and passed to handlers as a `context.Context`.
+-   Include the proto schema and expose over the `micro` schemas feature
 
 ## Contact
 

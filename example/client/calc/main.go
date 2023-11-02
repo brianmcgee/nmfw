@@ -61,7 +61,6 @@ func expAction(_ *fisk.ParseContext) error {
 
 func addAction(_ *fisk.ParseContext) error {
 	return client(func(c *service.CalcClient) error {
-
 		res, err := c.Add(context.Background(), service.AddRequest{Values: values})
 		if err != nil {
 			return err

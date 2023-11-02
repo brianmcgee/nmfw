@@ -15,8 +15,8 @@ import (
 	"github.com/nats-io/jsm.go/natscontext"
 	"github.com/nats-io/nats.go"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	model "github.com/ripienaar/nmfw/example/service"
 	impl "github.com/ripienaar/nmfw/example/impl"
+	model "github.com/ripienaar/nmfw/example/service"
 	"github.com/sirupsen/logrus"
 )
 

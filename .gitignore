@@ -3,3 +3,7 @@ protoc-gen-go-nmfw/protoc-gen-go-nmfw
 vendor
 example/client/calc/calc
 example/service/calc/calc
+
+.direnv
+.data
+result

@@ -1,0 +1,64 @@
+{
+  inputs,
+  lib,
+  ...
+}: {
+  imports = [
+    inputs.devshell.flakeModule
+  ];
+
+  config.perSystem = {
+    pkgs,
+    config,
+    system,
+    ...
+  }: let
+    inherit (pkgs.stdenv) isLinux isDarwin;
+  in {
+    config.devshells.default = {
+      env = [
+        {
+          name = "GOROOT";
+          value = pkgs.go + "/share/go";
+        }
+        {
+          name = "LD_LIBRARY_PATH";
+          value = "$DEVSHELL_DIR/lib";
+        }
+      ];
+
+      packages = with lib;
+        mkMerge [
+          [
+            # golang
+            pkgs.go
+            pkgs.gotools
+            pkgs.pprof
+            pkgs.rr
+            pkgs.delve
+            pkgs.golangci-lint
+            pkgs.protobuf
+            pkgs.protoc-gen-go
+          ]
+          # platform dependent CGO dependencies
+          (mkIf isLinux [
+            pkgs.gcc
+          ])
+          (mkIf isDarwin [
+            pkgs.darwin.cctools
+          ])
+        ];
+
+      commands = [
+        {
+          category = "development";
+          package = pkgs.evans;
+        }
+        {
+          category = "development";
+          package = inputs.gomod2nix.packages.${system}.default;
+        }
+      ];
+    };
+  };
+}

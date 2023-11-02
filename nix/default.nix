@@ -4,5 +4,6 @@
     ./checks.nix
     ./devshell.nix
     ./formatter.nix
+    ./packages.nix
   ];
 }

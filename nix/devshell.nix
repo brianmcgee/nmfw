@@ -11,6 +11,7 @@
     pkgs,
     config,
     system,
+    self',
     ...
   }: let
     inherit (pkgs.stdenv) isLinux isDarwin;
@@ -39,6 +40,9 @@
             pkgs.golangci-lint
             pkgs.protobuf
             pkgs.protoc-gen-go
+
+            # add protoc-gen-go-nmfw to the path
+            self'.packages.protoc-gen-go-nmfw
           ]
           # platform dependent CGO dependencies
           (mkIf isLinux [
@@ -51,12 +55,14 @@
 
       commands = [
         {
-          category = "development";
-          package = pkgs.evans;
+          category = "nix";
+          package = inputs.gomod2nix.packages.${system}.default;
         }
         {
-          category = "development";
-          package = inputs.gomod2nix.packages.${system}.default;
+          category = "example";
+          name = "calc";
+          help = "An example service build with nmfw";
+          command = "${self'.packages.example}/bin/calc $@";
         }
       ];
     };

@@ -141,6 +141,21 @@
         "type": "github"
       }
     },
+    "process-compose-flake": {
+      "locked": {
+        "lastModified": 1698517360,
+        "narHash": "sha256-u10MVmhHEqVa0u5TnZzeprjfZgB5H/2JDBoIyeNyR+c=",
+        "owner": "Platonic-Systems",
+        "repo": "process-compose-flake",
+        "rev": "ea1607cead57ce72dd06e178b4d55884a3be8854",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Platonic-Systems",
+        "repo": "process-compose-flake",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "devshell": "devshell",
@@ -148,6 +163,7 @@
         "flake-root": "flake-root",
         "gomod2nix": "gomod2nix",
         "nixpkgs": "nixpkgs_2",
+        "process-compose-flake": "process-compose-flake",
         "treefmt-nix": "treefmt-nix"
       }
     },

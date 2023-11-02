@@ -5,6 +5,7 @@
 }: {
   imports = [
     inputs.devshell.flakeModule
+    inputs.process-compose-flake.flakeModule
   ];
 
   config.perSystem = {
@@ -62,7 +63,10 @@
           category = "example";
           name = "calc";
           help = "An example service build with nmfw";
-          command = "${self'.packages.example}/bin/calc $@";
+          command = ''
+            # we force any context lookups to happen inside the nsc/nats state in .data
+            XDG_CONFIG_HOME="$PRJ_DATA_DIR" ${self'.packages.example}/bin/calc $@
+          '';
         }
       ];
     };
